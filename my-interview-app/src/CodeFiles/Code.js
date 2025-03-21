@@ -1001,69 +1001,6 @@ function withDefault(a = 10, ...args) {
 withDefault(undefined, 20, 30); // 10 [ 20, 30 ]
 withDefault(5); //5 []
 
-
-
-//Pollyfill for flat===============================================
-const testFlatArray = [1, 2, 3, [4, 5, 6, [8, 9, [33, 44]]], [10, 11, 12]];
-
-const resultFlatArray = testFlatArray.flat(2);
-// console.log(resultFlatArray);
-
-// Array.prototype.myFlat = function () {
-//   let resultArray = [];
-//   let testArray = this;
-//   for (let i = 0; i < testArray.length; i++) {
-//     if (Array.isArray(testArray[i])) {
-//       resultArray.push(...testArray[i]);
-//     } else {
-//       resultArray.push(testArray[i]);
-//     }
-//   }
-//   // resultArray = [...this];
-//   return resultArray;
-// };
-
-function myFlat(arr, depth = 1, output = []) {
-  if (depth < 0) {
-    output.push(arr);
-    // console.log(output);
-    return;
-  } else {
-    for (const item of arr) {
-      if (Array.isArray(item)) {
-        myFlat(item, depth - 1, output);
-        // console.log("Depth", depth, output);
-      } else {
-        output.push(item);
-        // console.log("else", output);
-      }
-    }
-  }
-  return output;
-}
-// const pollyFlatArray = myFlat(testFlatArray, 1);
-// console.log(pollyFlatArray);
-// const testFlatArray = [1, 2, 3, [4, 5, 6, [8, 9]], [10, 11, 12]];
-
-function myFlatIterative(arr, depth = 1) {
-  while (depth > 0) {
-    let tempArray = [];
-    arr.forEach((el) => {
-      if (Array.isArray(el)) {
-        tempArray.push(...el);
-      } else {
-        tempArray.push(el);
-      }
-    });
-    arr = tempArray;
-    depth -= 1;
-  }
-  return arr;
-}
-
-const pollyFlatArrayIterative = myFlatIterative(testFlatArray, 2);
-// console.log(pollyFlatArrayIterative);
-
 //Polyfill for object ==============================================
 
 const tempObj = {

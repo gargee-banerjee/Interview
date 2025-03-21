@@ -20,7 +20,7 @@ Function.prototype.newBind = function (...args) {
   };
 };
 const newFunc = pollyBindFunc.newBind(bindObj, "Tinsukia", "Assam");
-newFunc();
+// newFunc();
 
 Function.prototype.newBind2 = function (...args) {
   const fun = this;
@@ -81,24 +81,82 @@ const filteredArray = testFilterArray.filter(function (x) {
 });
 // console.log(filteredArray);
 
-Array.prototype.newFilter = function(action){
-    let result = [];
-    let inputArray = this;
-    inputArray.forEach((el)=>{
-        if(action(el))
-        result.push(el)
-    })
-    return result;
-}
-const pollyFilteredArray = testFilterArray.newFilter(function (x) {
-    return !(x % 2);
+Array.prototype.newFilter = function (action) {
+  let result = [];
+  let inputArray = this;
+  inputArray.forEach((el) => {
+    if (action(el)) result.push(el);
   });
+  return result;
+};
+const pollyFilteredArray = testFilterArray.newFilter(function (x) {
+  return !(x % 2);
+});
 //   console.log(pollyFilteredArray);
 
-//==============FLAT============================FLAT============================FLAT==============================
+//==============FLAT=ARRAY===========================FLAT=ARRAY===========================FLAT=ARRAY=============================
 //==========================================================================
 const testFlatArray = [1, 2, 3, [4, 5, 6, [8, 9, [33, 44]]], [10, 11, 12]];
 const resultFlatArray = testFlatArray.flat(2);
 // console.log(resultFlatArray);
 
-Array.prototype.newFlat = function(){}
+Array.prototype.newFlat = function (depth, result = []) {
+  let inputArray = this;
+  if (depth < 0) {
+    result.push(inputArray);
+    return;
+  }
+  inputArray.forEach((el) => {
+    if (Array.isArray(el)) {
+      el.newFlat(depth - 1, result);
+    } else {
+      result.push(el);
+    }
+  });
+  return result;
+};
+const pollyFlatArray = testFlatArray.newFlat(1);
+// console.log(pollyFlatArray);
+
+Array.prototype.flatIterative = function (depth) {
+  let inputArray = this;
+
+  while (depth >= 0) {
+    let result = [];
+    inputArray.forEach((el) => {
+      if (Array.isArray(el)) {
+        result.push(...el);
+      } else {
+        result.push(el);
+      }
+    });
+    depth = depth - 1;
+    inputArray = result;
+  }
+  return inputArray;
+};
+const pollyFlatArray2 = testFlatArray.flatIterative(1);
+// console.log(pollyFlatArray2);
+
+//==============FLAT=OBJECT===========================FLAT=OBJECT===========================FLAT=OBJECT=============================
+//==========================================================================
+const tempObj = {
+    name: "Gargee",
+    rollNo: "60",
+    address: {
+      state: "Assam",
+      town: "TSK",
+    },
+    branch: "CSSE",
+  };
+  
+  const tempObj2 = {
+    name: "Gargee",
+    rollNo: "60",
+    certificates: ["AWS", "Reacts"],
+    address: {
+      state: "Assam",
+      town: "TSK",
+    },
+    branch: "CSSE",
+  };
