@@ -983,43 +983,6 @@ const thisObject3 = {
 
 //Pollyfill for bind===========================================
 
-//Why Bind
-//1)Context setting
-//2)
-//Bind method
-function pollyBindFunc(town, state) {
-  console.log(`Hi! I am ${this.name} from ${town}, ${state}`);
-}
-const bindObj = {
-  name: "Gege Banner",
-  rollNo: "60",
-};
-// pollyBindFunc();
-const newFunc = pollyBindFunc.bind(bindObj, "Tinsukia", "Assam");
-// newFunc();
-
-//Pollyfill
-Function.prototype.newMyBind = function (...args) {
-  let fun = this;
-  // console.log(args)
-  const argument = args.slice(1);
-  let tempFun = function () {
-    fun.apply(args[0], argument);
-  };
-  return tempFun;
-};
-const newFunc2 = pollyBindFunc.newMyBind(bindObj, "Silliguri", "WestBengal");
-// newFunc2();
-
-Function.prototype.bind2 = function (...args) {
-  const argument = args.slice(1);
-  const boundFn = this;
-  return function (...newArgs) {
-    boundFn.call(args[0], ...argument, ...newArgs);
-  };
-};
-let a = pollyBindFunc.bind2(bindObj, "A", "Assam");
-a("78389");
 
 // Arrow function binding??
 //This in arrow is bounded during lexical scoping, so ignores bind
@@ -1038,86 +1001,7 @@ function withDefault(a = 10, ...args) {
 withDefault(undefined, 20, 30); // 10 [ 20, 30 ]
 withDefault(5); //5 []
 
-//Pollyfill for map==========================================
 
-//Map function
-const ownArr = [1, 2, 3, 4];
-const newArr = ownArr.map(function (x) {
-  return x * 2;
-});
-// console.log(newArr);
-
-//Pollyfill
-Array.prototype.newMyMap = function (funcAction) {
-  let arr = [];
-  for (let i = 0; i < this.length; i++) {
-    arr.push(funcAction.call(this, this[i]));
-  }
-
-  return arr;
-};
-
-const mul = function (t) {
-  return t * 2;
-};
-
-const arr56 = ownArr.newMyMap(function (t) {
-  return t * 2;
-});
-// console.log(arr56);
-
-//Pollyfill for reduce================================
-const testReduceArr = [1, 2, 3, 4, 5];
-//Reduce method
-const reducedValue = testReduceArr.reduce(function (x, total) {
-  return total + x;
-}, 0);
-
-//Pollyfill
-Array.prototype.newMyReduce = function (action, accValue) {
-  let total = accValue;
-  let tempArray = this;
-  for (let i = 0; i < tempArray.length; i++) {
-    total = action(this[i], total);
-  }
-  return total;
-};
-const pollyReducedValue = testReduceArr.newMyReduce(function (x, total) {
-  return total + x;
-}, 0);
-// console.log(pollyReducedValue);
-
-//Pollyfill for filter =================================================
-const testFilterArray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-//Filter method
-const filteredArray = testFilterArray.filter(function (x) {
-  return !(x % 2);
-});
-// console.log(filteredArray);
-
-//Pollyfill
-Array.prototype.newMyFilter = function (action) {
-  let array = this;
-  let filteredArray = [];
-  for (let i = 0; i < array.length; i++) {
-    if (action(array[i])) filteredArray.push(array[i]);
-  }
-  return filteredArray;
-};
-
-const pollyFilteredArray = testFilterArray.newMyFilter(function (x) {
-  return !(x % 2);
-});
-// console.log(pollyFilteredArray);
-
-Array.prototype.newMyFilter = function (action) {
-  let arr = [];
-  let opArr = this;
-  for (el of opArr) {
-    if (action(el)) arr.push(el);
-  }
-  return arr;
-};
 
 //Pollyfill for flat===============================================
 const testFlatArray = [1, 2, 3, [4, 5, 6, [8, 9, [33, 44]]], [10, 11, 12]];
